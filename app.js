@@ -1,61 +1,52 @@
 "use strict";
+// #0: Listen for page load
+window.addEventListener("load", initApp);
 
-// ========== DOM REFERENCE ==========
-const movieListContainer = document.querySelector("#movie-list");
+let allMovies = []; // Global array to hold all movies
 
-// ========== DISPLAY SINGLE MOVIE ==========
-function displayMovie(movieObject) {
-  const genreString = movieObject.genre.join(", ");
-  const actorsString = movieObject.actors.join(", "); // Ny linje!
-
-  const movieHTML = `
-    <article class="movie-card">
-      <img src="${movieObject.image}" 
-           alt="Poster of ${movieObject.title}" 
-           class="movie-poster" />
-      <div class="movie-info">
-        <h3>${movieObject.title} <span class="movie-year">(${movieObject.year})</span></h3>
-        <p class="movie-genre">${genreString}</p>
-        <p class="movie-rating">⭐ ${movieObject.rating}</p>
-        <p class="movie-director"><strong>Director:</strong> ${movieObject.director}</p>
-        <p class="movie-actors"><strong>Stars:</strong> ${actorsString}</p>
-      </div>
-      <article class="movie-card" data-description="${movieObject.description}">
-    <!-- ... resten af HTML ... -->
-  </article>
-    </article>
-  `;
-
-  movieListContainer.insertAdjacentHTML("beforeend", movieHTML);
+// #1: Initialize the app
+function initApp() {
+  console.log("initApp: app.js is running 🎉");
+  getMovies(); // Fetch and display movies
 }
 
-// ========== DISPLAY ALL MOVIES ==========
-function displayMovies(movieArray) {
-  movieListContainer.innerHTML = "";
-
-  for (const movie of movieArray) {
-    displayMovie(movie);
-  }
-
-  console.log(`🎉 ${movieArray.length} movies vist!`);
-}
-
-// ========== LOAD MOVIES FROM JSON ==========
-async function loadMovies() {
-  console.log("🌐 Henter movies fra JSON...");
+// #2: Fetch movies from JSON and display them
+async function getMovies() {
+  console.log("🌐 Henter alle movies fra JSON...");
 
   const response = await fetch("https://raw.githubusercontent.com/cederdorff/race/refs/heads/master/data/movies.json");
-  const moviesFromJSON = await response.json();
+  allMovies = await response.json();
 
-  console.log("📊 Data modtaget:", moviesFromJSON.length, "movies");
-
-  displayMovies(moviesFromJSON);
+  console.log(`📊 JSON data modtaget: ${allMovies.length} movies`);
+  displayMovies(allMovies);
 }
 
-// ===== APP INITIALISERING =====
-document.addEventListener("DOMContentLoaded", initApp);
-
-function initApp() {
-  loadMovies();
+// #3: Render all movies in the grid
+function displayMovies(movies) {
+  console.log(`🎬 Viser ${movies.length} movies`);
+  // Nulstil #movie-list HTML'en
+  document.querySelector("#movie-list").innerHTML = "";
+  // Gennemløb alle movies og kør displayMovie-funktionen for hver movie
+  for (const movie of movies) {
+    displayMovie(movie);
+  }
 }
 
+// #4: Render a single movie card
+function displayMovie(movie) {
+  const movieList = document.querySelector("#movie-list");
+  movieList.insertAdjacentHTML(
+    "beforeend",
+    /*html*/ `
+    <article class="movie-card" tabindex="0">
+      <img src="${movie.image}" alt="Poster of ${movie.title}" class="movie-poster" />
+      <div class="movie-info">
+        <h3>${movie.title} <span class="movie-year">(${movie.year})</span></h3>
+        <p class="movie-genre">${movie.genre.join(", ")}</p>
+        <p class="movie-rating">⭐ ${movie.rating}</p>
+        <p class="movie-director"><strong>Director:</strong> ${movie.director}</p>
+      </div>
+    </article>
+  `
+  );
+}
