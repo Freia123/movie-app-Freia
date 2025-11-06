@@ -3,6 +3,9 @@
 // Global variabel til alle film
 let allMovies = [];
 
+// #0: Listen for page load - og start app ved at kalde funktionen initApp
+window.addEventListener("load", initApp);
+
 // #1: Initialize the app
 function initApp() {
   console.log("initApp: app.js is running 🎉");
@@ -61,7 +64,7 @@ function displayMovie(movie) {
   const movieList = document.querySelector("#movie-list");
 
   const movieHTML = `
-    <article class="movie-card" tabindex="0">
+    <article class="movie-card">
       <img src="${movie.image}" 
            alt="Poster of ${movie.title}" 
            class="movie-poster" />
@@ -69,9 +72,7 @@ function displayMovie(movie) {
         <h3>${movie.title} <span class="movie-year">(${movie.year})</span></h3>
         <p class="movie-genre">${movie.genre.join(", ")}</p>
         <p class="movie-rating">⭐ ${movie.rating}</p>
-        <p class="movie-director"><strong>Director:</strong> ${
-          movie.director
-        }</p>
+        <p class="movie-director"><strong>Director:</strong> ${movie.director}</p>
       </div>
     </article>
   `;
@@ -83,14 +84,6 @@ function displayMovie(movie) {
   newCard.addEventListener("click", function () {
     console.log(`🎬 Klik på: "${movie.title}"`);
     showMovieModal(movie); // ÆNDRET: Fra showMovieDetails til showMovieModal
-  });
-
-  // Tilføj keyboard support
-  newCard.addEventListener("keydown", function (event) {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      showMovieModal(movie); // ÆNDRET: Fra showMovieDetails til showMovieModal
-    }
   });
 }
 
@@ -231,19 +224,14 @@ function filterMovies() {
   displayMovies(filteredMovies);
 }
 
-// Start appen når siden er loaded
-initApp();
-
-// #8: Vis movie i modal dialog
+// #9: Vis movie i modal dialog
 function showMovieModal(movie) {
   console.log("🎭 Åbner modal for:", movie.title);
 
   // Byg HTML struktur dynamisk
   const dialogContent = document.querySelector("#dialog-content");
   dialogContent.innerHTML = `
-    <img src="${movie.image}" alt="Poster af ${
-    movie.title
-  }" class="movie-poster">
+    <img src="${movie.image}" alt="Poster af ${movie.title}" class="movie-poster">
     <div class="dialog-details">
       <h2>${movie.title} <span class="movie-year">(${movie.year})</span></h2>
       <p class="movie-genre">${movie.genre.join(", ")}</p>
