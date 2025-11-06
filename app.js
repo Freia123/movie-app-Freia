@@ -69,7 +69,9 @@ function displayMovie(movie) {
         <h3>${movie.title} <span class="movie-year">(${movie.year})</span></h3>
         <p class="movie-genre">${movie.genre.join(", ")}</p>
         <p class="movie-rating">⭐ ${movie.rating}</p>
-        <p class="movie-director"><strong>Director:</strong> ${movie.director}</p>
+        <p class="movie-director"><strong>Director:</strong> ${
+          movie.director
+        }</p>
       </div>
     </article>
   `;
@@ -239,7 +241,9 @@ function showMovieModal(movie) {
   // Byg HTML struktur dynamisk
   const dialogContent = document.querySelector("#dialog-content");
   dialogContent.innerHTML = `
-    <img src="${movie.image}" alt="Poster af ${movie.title}" class="movie-poster">
+    <img src="${movie.image}" alt="Poster af ${
+    movie.title
+  }" class="movie-poster">
     <div class="dialog-details">
       <h2>${movie.title} <span class="movie-year">(${movie.year})</span></h2>
       <p class="movie-genre">${movie.genre.join(", ")}</p>
